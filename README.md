@@ -1,5 +1,6 @@
 # Node.JS with MY SQL Learning
-Project ini diperuntukan untuk pembelajaran  membangun Rest-Api dengan menggunakan Node.JS dengan MY SQL
+Enjoy Your Learning Backend process with Node.JS 
+and My SQL RDBMS :)
 
 ## How To Clone This Project ? 
 Clone in your directory and Install a Library Support for run this project :
