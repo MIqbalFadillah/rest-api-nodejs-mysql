@@ -93,5 +93,18 @@ module.exports = {
             return callBack(null, results[0]);
           }
         );
-      },
+    },
+
+    createToken:(data, callBack) => {
+        pool.query(
+            `insert into users_authentication(users_id,email,token,expaired_at,created_at,updated_at)
+            values(?,?,?,?,?)`,
+            [
+                data.users_id,
+                data.email,
+                data.token,
+                data.expaired_at
+            ]
+        )
+    },
 };

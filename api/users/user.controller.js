@@ -36,12 +36,12 @@ module.exports = {
                 return;
             }
             if(!results){
-                return res.json({
+                return res.status(404).json({
                     success: 0,
                     message: "Record Not Found"
                 });
             }
-            return res.json({
+            return res.status(200).json({
                 success: 1,
                 data: results
             });
@@ -54,7 +54,7 @@ module.exports = {
                 console.log(err);
                 return;
             }
-            return res.json({
+            return res.status(200).json({
                 success: 1,
                 data: results
             });
@@ -71,7 +71,7 @@ module.exports = {
                 return;
             }
             if(!results){
-                return res.json({
+                return res.status(400).json({
                     success: 0,
                     message: "Failed to updated user"
                 });
@@ -91,12 +91,12 @@ module.exports = {
                 return;
             }
             if(!results){
-                return res.json({
+                return res.status(404).json({
                     success: 0,
                     message: "Record Not Found..."
                 });
             }
-            return res.json({
+            return res.status(200).json({
                 success: 1,
                 message: "User Deleted successfully..."
             });
@@ -111,7 +111,7 @@ module.exports = {
                 return;
             }
             if(!results){
-                return res.json({
+                return res.status(400).json({
                     success: 0,
                     data: "Invalid email or Password Error"
                 });
@@ -119,17 +119,45 @@ module.exports = {
             const result = compareSync(body.password, results.password);
             if(result){
                 results.password = undefined;
-                const jsontoken = sign({result: results}, "qwe1234", {
+                const jsontoken = sign({result: results}, body.password, {
                     expiresIn: "1h"
                 });
-                return res.json({
+                return res.status(200).json({
                     success: 1,
                     message: "Login successfully",
-                    token: jsontoken
+                    token: jsontoken,
                 });
-                console.log(jsontoken);
             } else{
-                return res.josn({
+                return res.status(400).josn({
+                    success: 0,
+                    data: "Invalid email or password"
+                });
+            }
+        });
+    },
+
+    logout: (req, res) => {
+        const body = req.body;
+        getUserByUserEmail(body.email, (err, results)=>{
+            if(err){
+                console.log(err);
+                return;
+            }
+            if(!results){
+                return res.status(400).json({
+                    success: 0,
+                    data: "Invalid email or Password Error"
+                });
+            }
+            const result = compareSync(body.password, results.password);
+            if(result){
+                results.password = undefined;
+                return res.status(200).json({
+                    success: 1,
+                    message: "Logout successfully",
+                });
+            } else{
+                return res.status(400).josn({
                     success: 0,
                     data: "Invalid email or password"
                 });
