@@ -4,9 +4,9 @@ const {create,
     updateUser, 
     deleteUser,
     getUserByUserEmail } = require("./user.service");
-
+const { isAuthenticated } = require("../../utils/./date_convert");
 const {genSaltSync, hashSync, compareSync} = require("bcrypt");
-const { sign } = require("jsonwebtoken");
+const { sign, decode } = require("jsonwebtoken");
 
 module.exports = {
     createUser: (req, res) => {
@@ -122,10 +122,14 @@ module.exports = {
                 const jsontoken = sign({result: results}, body.password, {
                     expiresIn: "1h"
                 });
+                //const dateExp = isAuthenticated(jsontoken); 
+                const { exp } = decode(jsontoken);
+                const expireDate = new Date(exp*1000).toLocaleDateString("id-ID");
                 return res.status(200).json({
                     success: 1,
                     message: "Login successfully",
                     token: jsontoken,
+                    expaired_date: expireDate
                 });
             } else{
                 return res.status(400).josn({
@@ -164,4 +168,5 @@ module.exports = {
             }
         });
     }
+
 };
